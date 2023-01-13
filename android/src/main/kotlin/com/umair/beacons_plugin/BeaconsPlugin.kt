@@ -7,9 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.umair.beacons_plugin.beaconsimulator.ActivityMain
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -89,18 +91,20 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
         @JvmStatic
         private fun setUpPluginMethods(context: Context, messenger: BinaryMessenger) {
             Timber.plant(Timber.DebugTree())
-
+//            context.startActivity(Intent(context,ActivityMain::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             channel = MethodChannel(messenger, "beacons_plugin")
             notifyIfPermissionsGranted(context)
+            Log.e(TAG, "setUpPluginMethods: setUpPluginMethods")
             channel?.setMethodCallHandler { call, result ->
                 when {
                     call.method == "startMonitoring" -> {
+                        Log.e(TAG, "startMonitoring")
                         stopService = false
                         callBack?.startScanning()
                         result.success("Started scanning Beacons.")
                     }
                     call.method == "stopMonitoring" -> {
-
+                        Log.e(TAG, "stopMonitoring")
                         if (runInBackground) {
                             stopService = true
                             context.let {

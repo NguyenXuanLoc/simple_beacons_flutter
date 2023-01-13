@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/drawable/activity_drawer_background.xml" value="0.2315" />
+        <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/drawable/ic_app_plain.xml" value="0.2315" />
+        <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/layout-land/activity_about.xml" value="0.21781305114638447" />
+        <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/layout-land/activity_blank_dummy.xml" value="0.2985008818342152" />
+        <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/layout/activity_about.xml" value="0.25729166666666664" />
+        <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/menu/activity_drawer.xml" value="0.36666666666666664" />
+        <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/menu/fragment_beacon_edit_readonly.xml" value="0.22708333333333333" />
+        <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/menu/fragment_scan.xml" value="0.25729166666666664" />
+        <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/test_module/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/test_module2/src/main/res/layout/activity_main.xml" value="0.22864583333333333" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
