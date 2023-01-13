@@ -21,6 +21,27 @@ class BeaconsPlugin {
     }
   }
 
+  static Future<void> listenNative() async {
+    channel.setMethodCallHandler((call) async {
+      print("TAG METHOD RESULT: ${call.arguments}");
+/*
+
+      switch (call.method) {
+        case "scanEddyStone":
+          {
+            print("TAG METHOD RESULT: ${call.arguments}");
+          }
+      }
+*/
+    });
+  }
+
+  static Future<void> scanEddyStone() async {
+    final String? result = await channel.invokeMethod('scanEddyStone');
+    /**/
+    print("TAG scanEddyStonescanEddyStone: $result");
+  }
+
   static Future<void> startMonitoring() async {
     final String? result = await channel.invokeMethod('startMonitoring');
     printDebugMessage(result, 2);

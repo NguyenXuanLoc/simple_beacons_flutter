@@ -47,6 +47,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: null);
+    BeaconsPlugin.listenNative();
   }
 
   @override
@@ -76,6 +77,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
 
     if (Platform.isAndroid) {
+      BeaconsPlugin.scanEddyStone();
       BeaconsPlugin.channel.setMethodCallHandler((call) async {
         print("Method: ${call.method}");
         if (call.method == 'scannerReady') {

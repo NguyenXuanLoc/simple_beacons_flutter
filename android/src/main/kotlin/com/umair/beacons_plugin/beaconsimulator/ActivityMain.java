@@ -61,6 +61,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.umair.beacons_plugin.R;
+import com.umair.beacons_plugin.service.ScanService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,7 +134,6 @@ public class ActivityMain extends ActivityDrawer implements FragmentScanner.OnSc
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sLogger.debug("onCreate()");
-
         setContentView(R.layout.activity_main);
 
         mSharedFab = (FloatingActionButton) findViewById(R.id.main_fab_shared);
