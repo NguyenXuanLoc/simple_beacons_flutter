@@ -5,68 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6f3aa862-a088-489d-af9d-23762fe1594f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/android/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/GattStatusCode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/StandardGattService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/ADManufacturerSpecific.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/ADManufacturerSpecificBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/ADPayloadParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/ADStructure.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/ADStructureBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/Eddystone.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/EddystoneBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/EddystoneEID.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/EddystoneTLM.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/EddystoneUID.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/EddystoneURL.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/Flags.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/FlagsBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/LocalName.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/LocalNameBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/MS0105Builder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/MS019ABuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/MSBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/ServiceData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/ServiceDataBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/TxPowerLevel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/TxPowerLevelBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/UUIDs.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/UUIDsBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/Ucode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/advertising/UcodeBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/util/Bytes.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/ble/util/UUIDCreator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/localizationactivity/BlankDummyActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/localizationactivity/LanguageSetting.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/localizationactivity/LocalizationActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/localizationactivity/LocalizationDelegate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/localizationactivity/OnLocaleChangedListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/slf4j/AbstractSimpleLogger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/slf4j/AbstractSimpleLoggerFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/slf4j/DummyException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/slf4j/LoggerChannel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/slf4j/LoggerChannelLogcat.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/slf4j/LoggerChannelStdout.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/slf4j/LoggerFormatter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/slf4j/LoggerFormatterDefault.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/slf4j/PluggableLogger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/slf4j/PluggableLoggerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/BeaconsPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/BeaconsPlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/res/values/styles.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/beacons_plugin.iml" beforeDir="false" afterPath="$PROJECT_DIR$/beacons_plugin.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

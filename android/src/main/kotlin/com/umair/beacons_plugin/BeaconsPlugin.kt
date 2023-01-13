@@ -91,7 +91,7 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
         @JvmStatic
         private fun setUpPluginMethods(context: Context, messenger: BinaryMessenger) {
             Timber.plant(Timber.DebugTree())
-//            context.startActivity(Intent(context,ActivityMain::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            context.startActivity(Intent(context,ActivityMain::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             channel = MethodChannel(messenger, "beacons_plugin")
             notifyIfPermissionsGranted(context)
             Log.e(TAG, "setUpPluginMethods: setUpPluginMethods")

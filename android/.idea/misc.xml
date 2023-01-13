@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/drawable/activity_drawer_background.xml" value="0.2315" />
         <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/drawable/ic_app_plain.xml" value="0.2315" />
+        <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/drawable/ic_beacon_eddystone.xml" value="0.253" />
         <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/layout-land/activity_about.xml" value="0.21781305114638447" />
         <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/layout-land/activity_blank_dummy.xml" value="0.2985008818342152" />
         <entry key="..\:/PROJECT_FLUTTER/simple_beacons_flutter/android/src/main/res/layout/activity_about.xml" value="0.25729166666666664" />
