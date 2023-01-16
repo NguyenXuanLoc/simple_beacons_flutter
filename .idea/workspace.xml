@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6f3aa862-a088-489d-af9d-23762fe1594f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/service/EddyService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/service/ScanBeaconResultCallBack.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/service/ScanService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/service/BeaconsService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/BeaconsPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/BeaconsPlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/beaconsimulator/ActivityMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/beaconsimulator/ActivityMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/service/EddyService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/service/ScanBeaconResultCallBack.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/umair/beacons_plugin/service/ScanService.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/beacons_plugin.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/beacons_plugin.dart" afterDir="false" />
     </list>
@@ -38,6 +38,10 @@
             <RecentBranchesForRepo>
               <option name="branches">
                 <list>
+                  <RecentBranch>
+                    <option name="branchName" value="feature/scan" />
+                    <option name="lastUsedInstant" value="1673606208" />
+                  </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="feature/eddy_stone" />
                     <option name="lastUsedInstant" value="1673576332" />
@@ -84,15 +88,15 @@
     </task>
     <servers />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/beacons_plugin.dart</url>
-          <line>39</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

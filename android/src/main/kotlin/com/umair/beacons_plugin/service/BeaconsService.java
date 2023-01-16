@@ -15,7 +15,6 @@ import android.util.Log;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.umair.beacons_plugin.R;
 import com.umair.beacons_plugin.ble.advertising.ADPayloadParser;
 import com.umair.beacons_plugin.ble.advertising.ADStructure;
 import com.umair.beacons_plugin.ble.advertising.EddystoneURL;
@@ -23,28 +22,35 @@ import com.umair.beacons_plugin.ble.advertising.EddystoneURL;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
-
-public class ScanService {
+public class BeaconsService {
     private Context context;
     private Activity activity;
     private BluetoothAdapter mBluetoothAdapter;
     private String TAG = this.getClass().getSimpleName();
     private BluetoothLeScanner mBleScanner;
-    private ScanBeaconResultCallBack scanCallBack;
     private boolean mIsScanning = false;
     private MethodCall methodCall;
     private MethodChannel.Result result;
     List<String> lResult = new ArrayList<String>();
     private MethodChannel methodChannel;
+    private EventChannel.EventSink eventSink = null;
 
-    public ScanService(Context context, Activity activity, ScanBeaconResultCallBack callBack, MethodChannel methodChannel) {
+    public void setEventSink(EventChannel.EventSink eventSink) {
+        try {
+            this.eventSink = eventSink;
+        } catch (Exception ex) {
+            Log.e(TAG, "setEventSink: " + ex.toString());
+        }
+    }
+
+    public BeaconsService(Context context, Activity activity, MethodChannel methodChannel) {
         this.context = context;
         this.activity = activity;
         this.methodChannel = methodChannel;
-        this.scanCallBack = callBack;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mBleScanner = mBluetoothAdapter.getBluetoothLeScanner();
     }
@@ -60,7 +66,6 @@ public class ScanService {
                     EddystoneURL eddUrl = (EddystoneURL) structure;
                     String url = eddUrl.getURL().toString();
                     boolean isExits = false;
-                    scanCallBack.eddyStoneUrlCallBack(url);
                     for (int i = 0; i < lResult.size(); i++) {
                         if (lResult.get(i).equals(url)) {
                             isExits = true;
@@ -69,9 +74,8 @@ public class ScanService {
                     }
                     if (!isExits) {
                         Log.e(TAG, "onScanResult: " + url);
-//                        methodChannel.invokeMethod("scanEddyStone",url);
-//                        result.success(url);
                         lResult.add(url);
+                        eventSink.success(url);
                     }
                 }
             /*    if (structure instanceof EddystoneTLM) {
@@ -114,28 +118,41 @@ public class ScanService {
     };
 
     public void stopScan() {
-        if (mBleScanner != null && mBluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
-            mBleScanner.stopScan(mScanCallback);
+        try {
+            if (mBleScanner != null && mBluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
+                mBleScanner.stopScan(mScanCallback);
+            }
+        } catch (Exception ex) {
+            Log.e(TAG, "stopScan: " + ex.toString());
         }
     }
 
     public void startBeaconScan(MethodCall methodCall, MethodChannel.Result result) {
         stopScan();
-        Log.e(TAG, "startBeaconScan:");
-        this.methodCall = methodCall;
-        this.result = result;
-        if (mIsScanning) {
-            return;
+        try {
+            Log.e(TAG, "startBeaconScan:");
+            this.methodCall = methodCall;
+            this.result = result;
+            if (mIsScanning) {
+                return;
+            }
+            boolean ok = checkPermission();
+            if (!ok) {
+                return;
+            }
+            Log.e(TAG, "Starting scan of beacons");
+            mIsScanning = true;
+            ScanSettings.Builder builder = new ScanSettings.Builder();
+            builder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
+            mBleScanner.startScan(null, builder.build(), mScanCallback);
+        } catch (Exception ex) {
+            Log.e(TAG, "startBeaconScan: " + ex.toString());
         }
-        boolean ok = checkPermission();
-        if (!ok) {
-            return;
-        }
-        Log.e(TAG, "Starting scan of beacons");
-        mIsScanning = true;
-        ScanSettings.Builder builder = new ScanSettings.Builder();
-        builder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
-        mBleScanner.startScan(null, builder.build(), mScanCallback);
+    }
+
+    public void clearData() {
+        lResult.clear();
+        Log.e(TAG, "clearData: " + String.valueOf(lResult.size()));
     }
 
     private boolean checkPermission() {

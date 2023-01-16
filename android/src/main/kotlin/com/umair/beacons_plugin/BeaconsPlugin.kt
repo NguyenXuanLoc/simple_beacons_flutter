@@ -11,9 +11,7 @@ import android.util.Log
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.umair.beacons_plugin.beaconsimulator.ActivityMain
-import com.umair.beacons_plugin.service.ScanBeaconResultCallBack
-import com.umair.beacons_plugin.service.ScanService
+import com.umair.beacons_plugin.service.BeaconsService
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -23,7 +21,7 @@ import timber.log.Timber
 
 /** BeaconsPlugin */
 class BeaconsPlugin : FlutterPlugin, ActivityAware,
-    PluginRegistry.RequestPermissionsResultListener, ScanBeaconResultCallBack {
+    PluginRegistry.RequestPermissionsResultListener {
 
     private var context: Context? = null
     val lEddyStones = ArrayList<String>()
@@ -49,9 +47,10 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
         private var PERMISSION_REQUEST_BACKGROUND_LOCATION = 1891
         private var channel: MethodChannel? = null
         private var event_channel: EventChannel? = null
+        private var event_channel_scan_eddystone: EventChannel? = null
         private var currentActivity: Activity? = null
         private var beaconHelper: BeaconHelper? = null
-        private var scanService: ScanService? = null
+        private var beaconService: BeaconsService? = null
         private var defaultPermissionDialogTitle = "This app needs background location access"
         private var defaultPermissionDialogMessage =
             "Please grant location access so this app can detect beacons in the background."
@@ -107,7 +106,7 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
                 when {
                     call.method == "scanEddyStone" -> {
                         Log.e(TAG, "setUpPluginMethods: scanEddyStonescanEddyStone")
-                        scanService?.startBeaconScan(call,result)
+                        beaconService?.startBeaconScan(call, result)
                     }
                     call.method == "startMonitoring" -> {
                         Log.e(TAG, "startMonitoring")
@@ -131,6 +130,7 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
                         callBack?.addRegion(call, result)
                     }
                     call.method == "clearRegions" -> {
+                        beaconService?.clearData()
                         callBack?.clearRegions(call, result)
                     }
                     call.method == "runInBackground" -> {
@@ -207,7 +207,17 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
                     else -> result.notImplemented()
                 }
             }
+            event_channel_scan_eddystone = EventChannel(messenger, "scan_eddystone_stream")
+            event_channel_scan_eddystone?.setStreamHandler(object : EventChannel.StreamHandler {
+                override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+                    beaconService?.setEventSink(events)
+                    Log.e(TAG, "onListen: event_channel_scan_eddystone")
+                }
 
+                override fun onCancel(arguments: Any?) {
+                    TODO("Not yet implemented")
+                }
+            })
             event_channel = EventChannel(messenger, "beacons_plugin_stream")
             event_channel?.setStreamHandler(object : EventChannel.StreamHandler {
                 override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
@@ -248,7 +258,6 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
             }
 
             this.callBack = beaconHelper
-
             sendBLEScannerReadyCallback()
         }
 
@@ -375,7 +384,6 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
         }
 
         private var callBack: PluginImpl? = null
-
         fun sendBLEScannerReadyCallback() {
             channel?.invokeMethod("scannerReady", "")
         }
@@ -415,7 +423,7 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
         activityPluginBinding.addRequestPermissionsResultListener(this)
         //requestPermission()
         Log.e(TAG, "onAttachedToActivity: ")
-        scanService = ScanService(context, currentActivity, this, channel)
+        beaconService = BeaconsService(context, currentActivity, channel)
         if (arePermissionsGranted()) {
             sendBLEScannerReadyCallback()
         }
@@ -457,7 +465,7 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
         }
         return false
     }
-
+/*
     override fun eddyStoneUrlCallBack(url: String?) {
         var isExist = false;
         for (i in lEddyStones) {
@@ -471,5 +479,5 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
             }
             Log.e(TAG, "eddyStoneUrlCallBack:  ${url}")
         }
-    }
+    }*/
 }
