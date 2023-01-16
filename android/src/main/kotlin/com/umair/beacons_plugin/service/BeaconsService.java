@@ -15,10 +15,13 @@ import android.util.Log;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.umair.beacons_plugin.beaconsimulator.bluetooth.ByteTools;
+import com.umair.beacons_plugin.beaconsimulator.bluetooth.model.BeaconModel;
+import com.umair.beacons_plugin.beaconsimulator.bluetooth.model.BeaconType;
 import com.umair.beacons_plugin.ble.advertising.ADPayloadParser;
 import com.umair.beacons_plugin.ble.advertising.ADStructure;
+import com.umair.beacons_plugin.ble.advertising.EddystoneUID;
 import com.umair.beacons_plugin.ble.advertising.EddystoneURL;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +58,6 @@ public class BeaconsService {
         mBleScanner = mBluetoothAdapter.getBluetoothLeScanner();
     }
 
-    //    List<String> eddyStoneUrls = new ArrayList<>();
     private final ScanCallback mScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult scanResult) {
@@ -78,7 +80,17 @@ public class BeaconsService {
                         eventSink.success(url);
                     }
                 }
-            /*    if (structure instanceof EddystoneTLM) {
+            /*    if (structure instanceof EddystoneUID) {
+                    EddystoneUID eddUid = (EddystoneUID) structure;
+                    Log.e(TAG, "onScanResult:  ByteTools.bytesToHex(eddUid.getNamespaceId()"+ ByteTools.bytesToHex(eddUid.getNamespaceId()));
+               *//*     result[0] = context.getString(
+                            R.string.item_model_params_eddystoneUID,
+                            ByteTools.bytesToHex(eddUid.getNamespaceId()));
+                    result[1] = context.getString(
+                            R.string.item_model_params_eddystoneUID_sub,
+                            ByteTools.bytesToHex(eddUid.getInstanceId()));
+*//*
+            *//*    if (structure instanceof EddystoneTLM) {
                     EddystoneTLM eddTlm = (EddystoneTLM) structure;
                     String tlm = context.getString(
                             R.string.item_model_params_eddystoneTLM,
@@ -106,8 +118,9 @@ public class BeaconsService {
                             R.string.item_model_params_eddystoneUID_sub,
                             ByteTools.bytesToHex(eddUid.getInstanceId()));
 
-                }*/
-            }
+                }*//*
+                }
+            */}
         }
 
         public void onBatchScanResults(List<ScanResult> results) {
@@ -149,6 +162,7 @@ public class BeaconsService {
             Log.e(TAG, "startBeaconScan: " + ex.toString());
         }
     }
+
 
     public void clearData() {
         lResult.clear();

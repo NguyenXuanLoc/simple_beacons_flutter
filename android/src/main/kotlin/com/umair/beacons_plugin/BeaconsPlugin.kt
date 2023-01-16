@@ -12,6 +12,7 @@ import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.umair.beacons_plugin.service.BeaconsService
+import com.umair.beacons_plugin.service.BroadcastService
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -104,6 +105,11 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
             Log.e(TAG, "setUpPluginMethods: setUpPluginMethods")
             channel?.setMethodCallHandler { call, result ->
                 when {
+                    call.method == "sentBroadcast" -> {
+                        call.argument<String>("deviceId")?.let {
+                            BroadcastService.sentBroadcast(context, it, currentActivity)
+                        }
+                    }
                     call.method == "scanEddyStone" -> {
                         Log.e(TAG, "setUpPluginMethods: scanEddyStonescanEddyStone")
                         beaconService?.startBeaconScan(call, result)

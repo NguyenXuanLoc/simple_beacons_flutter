@@ -83,15 +83,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       BeaconsPlugin.channel.setMethodCallHandler((call) async {
         print("Method: ${call.method}");
         if (call.method == 'scannerReady') {
-          _showNotification("Beacons monitoring started..");
+          // _showNotification("Beacons monitoring started..");
           await BeaconsPlugin.startMonitoring();
           setState(() {
             isRunning = true;
           });
         } else if (call.method == 'isPermissionDialogShown') {
-          _showNotification(
+   /*       _showNotification(
               "Prominent disclosure message is shown to the user!");
-        }
+   */     }
       });
     } else if (Platform.isIOS) {
       _showNotification("Beacons monitoring started..");
@@ -211,7 +211,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               SizedBox(
                 height: 20.0,
               ),
-              Expanded(child: _buildResultsList())
+              Expanded(child: _buildResultsList()),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    BeaconsPlugin.sentBroadcast();
+                  },
+                  child: Text("Sent Broadcast", style: TextStyle(fontSize: 20)),
+                ),
+              )
             ],
           ),
         ),

@@ -62,6 +62,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.ParcelUuid;
 import android.os.SystemClock;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -100,6 +101,7 @@ public class BeaconSimulatorService extends Service {
 
     private static final String PREFIX = "com.umair.beacons_plugin.beaconsimulator.service.";
     public static final String ACTION_START = PREFIX + "ACTION_START";
+    public static final String ACTION_START_MODEL = PREFIX + "ACTION_START_MODEL";
     public static final String ACTION_SCHEDULED = PREFIX + "ACTION_SCHEDULED";
     public static final String ACTION_STOP = PREFIX + "ACTION_STOP";
     public static final String ACTION_STOP_ALL = PREFIX + "ACTION_STOP_ALL";
@@ -179,19 +181,18 @@ public class BeaconSimulatorService extends Service {
             }
             case ACTION_SCHEDULED: {
                 sLogger.info("Action: processing scheduled update");
-                final UUID id = ((ParcelUuid)intent.getParcelableExtra(EXTRA_BEACON_STORE_ID)).getUuid();
+                final UUID id = ((ParcelUuid) intent.getParcelableExtra(EXTRA_BEACON_STORE_ID)).getUuid();
                 final BeaconModel model = mBeaconStore.getBeacon(id);
                 if (mAdvertiseCallbacks.containsKey(model.getId())) {
                     updateBroadcast(startId, model.getId());
-                }
-                else {
+                } else {
                     sLogger.info("No more broadcasting this, skipping");
                 }
                 break;
             }
             case ACTION_STOP: {
                 sLogger.debug("Action: stopping a broadcast");
-                final UUID id = ((ParcelUuid)intent.getParcelableExtra(EXTRA_BEACON_STORE_ID)).getUuid();
+                final UUID id = ((ParcelUuid) intent.getParcelableExtra(EXTRA_BEACON_STORE_ID)).getUuid();
                 stopBroadcast(startId, id, false, false);
                 break;
             }
@@ -251,7 +252,7 @@ public class BeaconSimulatorService extends Service {
     }
 
     private void startBroadcast(int serviceStartId, UUID id, boolean isRestart) {
-        if ( !isRestart && mAdvertiseCallbacks.containsKey(id)) {
+        if (!isRestart && mAdvertiseCallbacks.containsKey(id)) {
             sLogger.info("Already broadcasting this beacon model, skipping");
             return;
         }
@@ -270,7 +271,7 @@ public class BeaconSimulatorService extends Service {
             return;
         }
         final AdvertiseSettings settings = model.getSettings().generateADSettings();
-        final ExtendedAdvertiseData exAdvertiseData =  model.generateADData();
+        final ExtendedAdvertiseData exAdvertiseData = model.generateADData();
         final AdvertiseData advertiseData = exAdvertiseData.getAdvertiseData();
         final String localName = exAdvertiseData.getLocalName();
         if (exAdvertiseData.getAdvertiseData().getIncludeDeviceName()) {
@@ -280,8 +281,7 @@ public class BeaconSimulatorService extends Service {
             }
             mBtAdvertiser.startAdvertising(settings, advertiseData, new MyAdvertiseCallback(serviceStartId, id, isRestart));
             mBtAdapter.setName(backupName);
-        }
-        else {
+        } else {
             mBtAdvertiser.startAdvertising(settings, advertiseData, new MyAdvertiseCallback(serviceStartId, id, isRestart));
         }
     }
@@ -335,8 +335,8 @@ public class BeaconSimulatorService extends Service {
 
     private void stopAll(int serviceId, boolean ignoreServiceId) {
         sLogger.info("Stopping all broadcasts");
-        Set<UUID> idSet =  new TreeSet<>(mAdvertiseCallbacks.keySet()) ;
-        for(UUID id: idSet){
+        Set<UUID> idSet = new TreeSet<>(mAdvertiseCallbacks.keySet());
+        for (UUID id : idSet) {
             stopBroadcast(serviceId, id, false, ignoreServiceId);
         }
         mAdvertiseCallbacks.clear();
@@ -446,6 +446,7 @@ public class BeaconSimulatorService extends Service {
                 updateNotification();
             }
             sLogger.info("Success in starting broadcast, currently active: {}", mAdvertiseCallbacks.size());
+            Log.e("TAG", "Success in starting broadcast, currently active: {}" + String.valueOf(mAdvertiseCallbacks.size()));
         }
         public void onStartFailure(int errorCode) {
             EventBus.getDefault().post(new BroadcastChangedEvent(_id, false, mAdvertiseCallbacks.size(), true));
@@ -470,6 +471,7 @@ public class BeaconSimulatorService extends Service {
                     reason = R.string.advertise_error_unknown;
             }
             Toast.makeText(BeaconSimulatorService.this, reason, Toast.LENGTH_SHORT).show();
+            Log.e("TAG", "Error starting broadcasting: {}" + String.valueOf(reason));
             sLogger.warn("Error starting broadcasting: {}", reason);
             mAdvertiseStartTimestamp.remove(_id);
             if (mAdvertiseCallbacks.size() == 0) {
@@ -480,7 +482,7 @@ public class BeaconSimulatorService extends Service {
     }
 
     private void updateNotification() {
-        final Intent activityIntent = new Intent(BeaconSimulatorService.this, ActivityMain.class);
+      /*  final Intent activityIntent = new Intent(BeaconSimulatorService.this, ActivityMain.class);
         final PendingIntent activityPendingIntent = PendingIntent.getActivity(BeaconSimulatorService.this, 0, activityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         final Intent stopBroadcastIntent = new Intent(BeaconSimulatorService.this, BeaconSimulatorService.class);
         stopBroadcastIntent.setAction(ACTION_STOP_ALL);
@@ -505,7 +507,7 @@ public class BeaconSimulatorService extends Service {
                 .addAction(R.drawable.ic_menu_pause, getString(R.string.notif_action_stop), stopBroadcastPendingIntent)
                 .setContentIntent(activityPendingIntent);
         startForeground(NOTIFICATION_ID, notifBuilder.build());
-    }
+    */}
 
 
 }

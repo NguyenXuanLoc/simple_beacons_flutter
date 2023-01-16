@@ -23,12 +23,10 @@ import java.net.URL;
 /**
  * Eddystone URL.
  *
- * @since 1.5
- *
  * @see <a href="https://github.com/google/eddystone/tree/master/eddystone-url">Eddystone URL</a>
+ * @since 1.5
  */
-public class EddystoneURL extends Eddystone
-{
+public class EddystoneURL extends Eddystone {
     private static final long serialVersionUID = 1L;
     private static final String STRING_FORMAT = "EddystoneURL(TxPower=%d,URL=%s)";
 
@@ -58,7 +56,7 @@ public class EddystoneURL extends Eddystone
 
 
     private final int mTxPower;
-    private final URL mURL;
+    private  URL mURL;
 
 
     /**
@@ -97,9 +95,16 @@ public class EddystoneURL extends Eddystone
         super(length, type, data, FrameType.URL);
 
         mTxPower = extractTxPower(data);
-        mURL     = extractURL(data);
+        mURL = extractURL(data);
     }
 
+    public void setUrl(String url) {
+        try {
+            this.mURL = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
 
     private int extractTxPower(byte[] data)
     {
