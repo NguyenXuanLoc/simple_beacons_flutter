@@ -482,7 +482,7 @@ public class BeaconSimulatorService extends Service {
     }
 
     private void updateNotification() {
-      /*  final Intent activityIntent = new Intent(BeaconSimulatorService.this, ActivityMain.class);
+        final Intent activityIntent = new Intent(BeaconSimulatorService.this, ActivityMain.class);
         final PendingIntent activityPendingIntent = PendingIntent.getActivity(BeaconSimulatorService.this, 0, activityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         final Intent stopBroadcastIntent = new Intent(BeaconSimulatorService.this, BeaconSimulatorService.class);
         stopBroadcastIntent.setAction(ACTION_STOP_ALL);
@@ -507,7 +507,7 @@ public class BeaconSimulatorService extends Service {
                 .addAction(R.drawable.ic_menu_pause, getString(R.string.notif_action_stop), stopBroadcastPendingIntent)
                 .setContentIntent(activityPendingIntent);
         startForeground(NOTIFICATION_ID, notifBuilder.build());
-    */}
+    }
 
 
 }
