@@ -1,1 +1,8 @@
 rootProject.name = 'beacons_plugin'
+/*
+include ':localization-activity'
+include ':nv-bluetooth'
+include ':test_module'
+include ':test_module2'
+project(':nv-bluetooth').projectDir = new File('path/to/nv-bluetooth')
+project(':localization-activity').projectDir = new File('path/to/localization-activity')*/

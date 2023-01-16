@@ -31,6 +31,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   final StreamController<String> beaconEventsController =
       StreamController<String>.broadcast();
+  final StreamController<String> eddyEventsController =
+      StreamController<String>.broadcast();
 
   @override
   void initState() {
@@ -47,6 +49,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: null);
+    BeaconsPlugin.listenNative();
   }
 
   @override
@@ -76,6 +79,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
 
     if (Platform.isAndroid) {
+      BeaconsPlugin.scanEddyStone();
       BeaconsPlugin.channel.setMethodCallHandler((call) async {
         print("Method: ${call.method}");
         if (call.method == 'scannerReady') {
@@ -98,7 +102,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
 
     BeaconsPlugin.listenToBeacons(beaconEventsController);
-
+    BeaconsPlugin.listenToScanEddyStone(eddyEventsController);
+    /*
     await BeaconsPlugin.addRegion(
         "BeaconType1", "909c3cf9-fc5c-4841-b695-380958a51a5a");
     await BeaconsPlugin.addRegion(
@@ -114,8 +119,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     BeaconsPlugin.setBackgroundScanPeriodForAndroid(
         backgroundScanPeriod: 2200, backgroundBetweenScanPeriod: 10);
-
-    beaconEventsController.stream.listen(
+        beaconEventsController.stream.listen(
         (data) {
           if (data.isNotEmpty && isRunning) {
             setState(() {
@@ -135,9 +139,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         onError: (error) {
           print("Error: $error");
         });
-
-    //Send 'true' to run in background
-    await BeaconsPlugin.runInBackground(true);
+        //Send 'true' to run in background
+        await BeaconsPlugin.runInBackground(true);
+        */
+    eddyEventsController.stream.listen((data) {
+      _beaconResult = data;
+      _results.add(_beaconResult);
+      _nrMessagesReceived++;
+      setState(() {});
+    });
 
     if (!mounted) return;
   }
@@ -164,7 +174,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                           fontWeight: FontWeight.bold,
                         )),
               )),
-              Padding(
+              /*        Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: ElevatedButton(
                   onPressed: () async {
@@ -181,7 +191,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   child: Text(isRunning ? 'Stop Scanning' : 'Start Scanning',
                       style: TextStyle(fontSize: 20)),
                 ),
-              ),
+              ),*/
               Visibility(
                 visible: _results.isNotEmpty,
                 child: Padding(
@@ -191,10 +201,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                       setState(() {
                         _nrMessagesReceived = 0;
                         _results.clear();
+                        BeaconsPlugin.clearRegions();
                       });
                     },
-                    child:
-                        Text("Clear Results", style: TextStyle(fontSize: 20)),
+                    child: Text("Refresh", style: TextStyle(fontSize: 20)),
                   ),
                 ),
               ),
@@ -242,12 +252,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           color: Colors.black,
         ),
         itemBuilder: (context, index) {
-          DateTime now = DateTime.now();
-          String formattedDate =
-              DateFormat('yyyy-MM-dd – kk:mm:ss.SSS').format(now);
           final item = ListTile(
               title: Text(
-                "Time: $formattedDate\n${_results[index]}",
+                "WALL $index \n ${_results[index]}",
                 textAlign: TextAlign.justify,
                 style: Theme.of(context).textTheme.headline4?.copyWith(
                       fontSize: 14,

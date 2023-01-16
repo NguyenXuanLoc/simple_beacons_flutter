@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 class BeaconsPlugin {
   static const MethodChannel channel = const MethodChannel('beacons_plugin');
   static const event_channel = EventChannel('beacons_plugin_stream');
+  static const event_channel_eddy_stone = EventChannel('scan_eddystone_stream');
 
   // 0 = no messages, 1 = only errors, 2 = all
   static int _debugLevel = 0;
@@ -19,6 +20,27 @@ class BeaconsPlugin {
     if (_debugLevel >= msgDebugLevel) {
       print('beacons_plugin: $msg');
     }
+  }
+
+  static Future<void> listenNative() async {
+    channel.setMethodCallHandler((call) async {
+      print("TAG METHOD RESULT: ${call.arguments}");
+/*
+
+      switch (call.method) {
+        case "scanEddyStone":
+          {
+            print("TAG METHOD RESULT: ${call.arguments}");
+          }
+      }
+*/
+    });
+  }
+
+  static Future<void> scanEddyStone() async {
+    final String? result = await channel.invokeMethod('scanEddyStone');
+    /**/
+    print("TAG scanEddyStonescanEddyStone: $result");
   }
 
   static Future<void> startMonitoring() async {
@@ -106,6 +128,14 @@ class BeaconsPlugin {
       },
     );
     printDebugMessage(result, 2);
+  }
+
+  static listenToScanEddyStone(StreamController controller) {
+    event_channel_eddy_stone.receiveBroadcastStream().listen((event) {
+      controller.add(event);
+    }, onError: (error) {
+      print('TAG Received error: ${error.message}');
+    });
   }
 
   static listenToBeacons(StreamController controller) async {

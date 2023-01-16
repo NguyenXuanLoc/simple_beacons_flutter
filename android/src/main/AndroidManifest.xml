@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -27,8 +30,7 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name="com.umair.beacons_plugin.BeaconsDiscoveryService" />
+        <service android:name="com.umair.beacons_plugin.BeaconsDiscoveryService" />
 
         <service
             android:name="org.altbeacon.beacon.service.BeaconService"
@@ -38,5 +40,37 @@
         <service
             android:name="org.altbeacon.beacon.BeaconIntentProcessor"
             android:enabled="true" />
+
+        <activity
+            android:name=".beaconsimulator.ActivityMain"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".beaconsimulator.ActivityAbout"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".beaconsimulator.ActivityDetailedScan"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".beaconsimulator.ActivityBeaconEdit"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".beaconsimulator.ActivitySettings"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".beaconsimulator.ActivityBeaconDiagnostic"
+            android:theme="@style/AppTheme.Dialog" />
+        <activity
+            android:name=".beaconsimulator.ActivityLicenses"
+            android:theme="@style/AppTheme.Dialog" />
+
+        <service android:name=".beaconsimulator.bluetooth.BeaconSimulatorService" />
+        <receiver
+            android:name=".beaconsimulator.RebootReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
