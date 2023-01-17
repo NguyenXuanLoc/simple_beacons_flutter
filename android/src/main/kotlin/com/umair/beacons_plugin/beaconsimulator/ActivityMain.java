@@ -61,7 +61,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.umair.beacons_plugin.R;
-import com.umair.beacons_plugin.service.ScanService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

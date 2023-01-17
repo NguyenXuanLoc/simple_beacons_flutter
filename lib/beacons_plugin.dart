@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter/services.dart';
+import 'dart:io';
 
 class BeaconsPlugin {
   static const MethodChannel channel = const MethodChannel('beacons_plugin');
@@ -59,6 +61,27 @@ class BeaconsPlugin {
     printDebugMessage(result, 2);
   }
 
+  static Future<String> getInfo() async {
+    var deviceInfo = DeviceInfoPlugin();
+    try {
+      if (Platform.isAndroid) {
+        var android = await deviceInfo.androidInfo;
+        return android.androidId.toString();
+      } else if (Platform.isIOS) {
+        var iosInfo = await deviceInfo.iosInfo;
+        return iosInfo.identifierForVendor.toString();
+      }
+    } catch (ex) {
+      return '';
+    }
+    return '';
+  }
+
+  static Future<void> sentBroadcast() async {
+    var deviceId = await getInfo();
+    await channel.invokeMethod("sentBroadcast", {'deviceId': deviceId});
+  }
+
   static Future<void> clearRegions() async {
     final String? result = await channel.invokeMethod('clearRegions');
     printDebugMessage(result, 2);
@@ -88,7 +111,7 @@ class BeaconsPlugin {
 
   static Future<void> setForegroundScanPeriodForAndroid(
       {int foregroundScanPeriod = 1100,
-      int foregroundBetweenScanPeriod = 0}) async {
+        int foregroundBetweenScanPeriod = 0}) async {
     final String? result = await channel
         .invokeMethod('setForegroundScanPeriodForAndroid', <String, dynamic>{
       'foregroundScanPeriod': foregroundScanPeriod,
@@ -99,7 +122,7 @@ class BeaconsPlugin {
 
   static Future<void> setBackgroundScanPeriodForAndroid(
       {int backgroundScanPeriod = 1100,
-      int backgroundBetweenScanPeriod = 0}) async {
+        int backgroundBetweenScanPeriod = 0}) async {
     final String? result = await channel
         .invokeMethod('setBackgroundScanPeriodForAndroid', <String, dynamic>{
       'backgroundScanPeriod': backgroundScanPeriod,
@@ -116,8 +139,8 @@ class BeaconsPlugin {
     printDebugMessage(result, 2);
   }
 
-  static Future<void> addRegionForIOS(
-      String uuid, int major, int minor, String name) async {
+  static Future<void> addRegionForIOS(String uuid, int major, int minor,
+      String name) async {
     final String? result = await channel.invokeMethod(
       'addRegionForIOS',
       <String, dynamic>{
