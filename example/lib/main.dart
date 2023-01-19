@@ -67,6 +67,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
+    BeaconsPlugin.listenToScanEddyStone(eddyEventsController);
+
+    eddyEventsController.stream.listen((data) {
+      _beaconResult = data;
+      _results.add(_beaconResult);
+      _nrMessagesReceived++;
+      setState(() {});
+    });
+
     if (Platform.isAndroid) {
       //Prominent disclosure
       await BeaconsPlugin.setDisclosureDialogMessage(
@@ -102,7 +111,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
 
     BeaconsPlugin.listenToBeacons(beaconEventsController);
-    BeaconsPlugin.listenToScanEddyStone(eddyEventsController);
     /*
     await BeaconsPlugin.addRegion(
         "BeaconType1", "909c3cf9-fc5c-4841-b695-380958a51a5a");
@@ -142,12 +150,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         //Send 'true' to run in background
         await BeaconsPlugin.runInBackground(true);
         */
-    eddyEventsController.stream.listen((data) {
-      _beaconResult = data;
-      _results.add(_beaconResult);
-      _nrMessagesReceived++;
-      setState(() {});
-    });
+
 
     if (!mounted) return;
   }
