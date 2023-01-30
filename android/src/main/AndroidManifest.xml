@@ -65,6 +65,7 @@
 
         <service android:name=".beaconsimulator.bluetooth.BeaconSimulatorService" />
         <receiver
+            android:exported="true"
             android:name=".beaconsimulator.RebootReceiver"
             android:enabled="false">
             <intent-filter>
