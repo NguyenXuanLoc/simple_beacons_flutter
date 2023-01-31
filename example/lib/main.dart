@@ -196,15 +196,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 ),
               ),*/
               Visibility(
-                visible: _results.isNotEmpty,
+                visible: true,
                 child: Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: ElevatedButton(
                     onPressed: () async {
-                      setState(() {
+                      await BeaconsPlugin.clearRegions();
+                      BeaconsPlugin.scanEddyStone();
+                      setState(()  {
                         _nrMessagesReceived = 0;
                         _results.clear();
-                        BeaconsPlugin.clearRegions();
                       });
                     },
                     child: Text("Refresh", style: TextStyle(fontSize: 20)),
