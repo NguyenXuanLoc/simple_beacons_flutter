@@ -146,9 +146,11 @@ public class BeaconsService {
             Log.e(TAG, "startBeaconScan:");
             this.methodCall = methodCall;
             this.result = result;
+/*
             if (mIsScanning) {
                 return;
             }
+*/
             boolean ok = checkPermission();
             if (!ok) {
                 return;

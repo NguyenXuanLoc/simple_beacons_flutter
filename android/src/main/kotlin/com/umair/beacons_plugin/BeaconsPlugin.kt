@@ -221,7 +221,6 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
                 }
 
                 override fun onCancel(arguments: Any?) {
-                    TODO("Not yet implemented")
                 }
             })
             event_channel = EventChannel(messenger, "beacons_plugin_stream")
