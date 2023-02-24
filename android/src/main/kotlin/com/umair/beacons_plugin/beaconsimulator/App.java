@@ -151,7 +151,7 @@ public class App extends Application {
         res.updateConfiguration(conf, dm);
     }
 
-    @Subscribe
+    
     public void onUserRequestStartEvent(UserRequestStartEvent event) {
         mBeaconStore.putActiveBeacon(event.getId());
         if (mConfig.getBroadcastResilience()) {
@@ -159,7 +159,7 @@ public class App extends Application {
         }
     }
 
-    @Subscribe
+    
     public void onUserRequestStopEvent(UserRequestStopEvent event) {
         mBeaconStore.removeActiveBeacon(event.getId());
         if (mBeaconStore.activeBeacons().size() == 0) {
@@ -167,13 +167,13 @@ public class App extends Application {
         }
     }
 
-    @Subscribe
+    
     public void onUserRequestStopAllEvent(UserRequestStopAllEvent event) {
         mBeaconStore.removeAllActiveBeacons();
         enableRebootResilience(false);
     }
 
-    @Subscribe
+    
     public void onBeaconBroadcastChange(BroadcastChangedEvent event) {
         if (event.isFailure()) {
             mBeaconStore.removeActiveBeacon(event.getBeaconId());
