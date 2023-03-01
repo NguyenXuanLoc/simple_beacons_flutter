@@ -79,7 +79,7 @@ public class DialogCopyBeacon extends BottomSheetDialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        _beaconStore = ((App)activity.getApplication()).getBeaconStore();
+        _beaconStore = App.getInstance().getBeaconStore();
     }
 
     @Nullable

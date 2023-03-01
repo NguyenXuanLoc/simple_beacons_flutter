@@ -63,7 +63,6 @@ public class ActivitySettings extends LocalizationActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((App)getApplication()).updateLanguage(this); // Before setContentView
         setContentView(R.layout.activity_settings);
         Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
         setSupportActionBar(toolbar);

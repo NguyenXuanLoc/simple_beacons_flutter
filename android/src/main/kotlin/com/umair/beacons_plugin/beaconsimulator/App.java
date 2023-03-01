@@ -56,13 +56,6 @@ import com.umair.beacons_plugin.R;
 import com.umair.beacons_plugin.beaconsimulator.bluetooth.BeaconSimulatorService;
 import com.umair.beacons_plugin.beaconsimulator.bluetooth.BeaconStore;
 import com.umair.beacons_plugin.beaconsimulator.bluetooth.BtNumbers;
-import com.umair.beacons_plugin.beaconsimulator.bluetooth.event.BroadcastChangedEvent;
-import com.umair.beacons_plugin.beaconsimulator.event.UserRequestStartEvent;
-import com.umair.beacons_plugin.beaconsimulator.event.UserRequestStopAllEvent;
-import com.umair.beacons_plugin.beaconsimulator.event.UserRequestStopEvent;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +64,12 @@ import java.util.Set;
 import java.util.UUID;
 
 
-public class App extends Application {
+public class App {
+    public static Context context;
+
+  public App() {
+        this.sInstance = this;
+    }
 
     private static final Logger sLogger = LoggerFactory.getLogger(App.class);
 
@@ -89,24 +87,23 @@ public class App extends Application {
         return sInstance;
     }
 
+    public static void setContext(Context context1) {
+        context = context1;
+    }
 
-    @Override
-    public void onCreate() {
+    public void init() {
         sInstance = this;
-
-        super.onCreate();
-
         LoggerConfig.configLogger();            // We can start to log starting here
         sLogger.info("Beacon simulator starting!");
 
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        PreferenceManager.setDefaultValues(context, R.xml.preferences, false);
         LanguageSetting.setDefaultLanguage(Locale.getDefault().getLanguage());
 
-        mRebootReceiverComponent = new ComponentName(this, RebootReceiver.class);
-        mPm = getPackageManager();
+        mRebootReceiverComponent = new ComponentName(context, RebootReceiver.class);
+        mPm = context.getPackageManager();
 
-        mBeaconStore = new BeaconStore(getApplicationContext());
-        mConfig = new Config(this);
+        mBeaconStore = new BeaconStore(context.getApplicationContext());
+        mConfig = new Config(context);
 
         sLogger.info("System language is: {}", Locale.getDefault().getLanguage());
         sLogger.info("Config - language: {}, resilient: {}, keep_screen: {}",
@@ -114,15 +111,12 @@ public class App extends Application {
 
         // Purge or process running list of beacon
         // It may be due to a crash, or a sudden device reboot
-        if (mConfig.getBroadcastResilience() ) {
+        if (mConfig.getBroadcastResilience()) {
             startResilientBeacons();
-        }
-        else {
+        } else {
             mBeaconStore.removeAllActiveBeacons();
         }
-        EventBus.getDefault().register(this);
     }
-
 
     public BeaconStore getBeaconStore() {
         return mBeaconStore;
@@ -131,7 +125,7 @@ public class App extends Application {
 
     public BtNumbers getBtNumbers() {
         if (mBtNumbers == null) {
-            mBtNumbers = new BtNumbers(this);
+            mBtNumbers = new BtNumbers(context);
         }
         return mBtNumbers;
     }
@@ -141,54 +135,14 @@ public class App extends Application {
         return mConfig;
     }
 
-
-    // Before setContentView
-    public void updateLanguage(Context context) {
-        Resources res = context.getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.setLocale(getConfig().getLocale());
-        res.updateConfiguration(conf, dm);
-    }
-
-    
-    public void onUserRequestStartEvent(UserRequestStartEvent event) {
-        mBeaconStore.putActiveBeacon(event.getId());
-        if (mConfig.getBroadcastResilience()) {
-            enableRebootResilience(true);
-        }
-    }
-
-    
-    public void onUserRequestStopEvent(UserRequestStopEvent event) {
-        mBeaconStore.removeActiveBeacon(event.getId());
-        if (mBeaconStore.activeBeacons().size() == 0) {
-            enableRebootResilience(false);
-        }
-    }
-
-    
-    public void onUserRequestStopAllEvent(UserRequestStopAllEvent event) {
-        mBeaconStore.removeAllActiveBeacons();
-        enableRebootResilience(false);
-    }
-
-    
-    public void onBeaconBroadcastChange(BroadcastChangedEvent event) {
-        if (event.isFailure()) {
-            mBeaconStore.removeActiveBeacon(event.getBeaconId());
-        }
-    }
-
     public void startResilientBeacons() {
         final Set<String> beacons = getBeaconStore().activeBeacons();
         sLogger.info("Start pending beacons: {}", beacons);
         if (beacons.size() != 0) {
-            for(String beaconId : beacons) {
-                BeaconSimulatorService.startBroadcast(this, UUID.fromString(beaconId), false);
+            for (String beaconId : beacons) {
+                BeaconSimulatorService.startBroadcast(context, UUID.fromString(beaconId), false);
             }
-        }
-        else {
+        } else {
             // No beacons in running list, resilient mode should be disabled until beacons are broadcasted
             enableRebootResilience(false);
         }

@@ -115,7 +115,7 @@ public class FragmentDetailedScan extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mBtNumbers = ((App)getActivity().getApplication()).getBtNumbers();
+        mBtNumbers = App.getInstance().getBtNumbers();
     }
 
     @Override
@@ -130,22 +130,22 @@ public class FragmentDetailedScan extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = getArguments();
-        mLayoutInflater =  (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mLayoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         //ScanResult scanResult = (ScanResult)getArguments().get(SCAN_RESULT);
-        mScanResult = (ScanResult)bundle.get(SCAN_RESULT);
+        mScanResult = (ScanResult) bundle.get(SCAN_RESULT);
         if (mScanResult == null) {
             return;
         }
         mAdStructures = ADPayloadParser.getInstance().parse(mScanResult.getScanRecord().getBytes());
 
-        ViewGroup cardContainer = (ViewGroup)view.findViewById(R.id.detailedscan_linearlayout_cardlist);
+        ViewGroup cardContainer = (ViewGroup) view.findViewById(R.id.detailedscan_linearlayout_cardlist);
         fillDeviceCard(cardContainer);
         generateCards(cardContainer); // It also fills mBeaconModel
 
-        FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.detailedscan_fab_copy);
-        boolean canCopy = ! (BeaconType.raw.equals(mBeaconModel.getType()) | BeaconType.eddystoneEID.equals(mBeaconModel.getType()));
-        if ( canCopy ) {
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.detailedscan_fab_copy);
+        boolean canCopy = !(BeaconType.raw.equals(mBeaconModel.getType()) | BeaconType.eddystoneEID.equals(mBeaconModel.getType()));
+        if (canCopy) {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -153,14 +153,13 @@ public class FragmentDetailedScan extends Fragment {
                     dialog.show(getFragmentManager(), dialog.getTag());
                 }
             });
-        }
-        else {
+        } else {
             fab.hide();
         }
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.detailedscan_toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ActionBar actionBar =  ((AppCompatActivity)getActivity()).getSupportActionBar();
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -176,68 +175,56 @@ public class FragmentDetailedScan extends Fragment {
 
         for (ADStructure structure : mAdStructures) {
             if (structure instanceof EddystoneUID) {
-                EddystoneUID eddystoneUidStructure = (EddystoneUID)structure;
+                EddystoneUID eddystoneUidStructure = (EddystoneUID) structure;
                 mBeaconModel = new BeaconModel(BeaconType.eddystoneUID);
                 mBeaconModel.getEddystoneUID().setPower(eddystoneUidStructure.getTxPower());
                 mBeaconModel.getEddystoneUID().setNamespace(eddystoneUidStructure.getNamespaceIdAsString());
                 mBeaconModel.getEddystoneUID().setInstance(eddystoneUidStructure.getInstanceIdAsString());
                 fillEddystoneUIDCard(mBeaconModel, cardContainer);
-            }
-            else if (structure instanceof EddystoneURL) {
-                EddystoneURL eddystoneUrlStructure = (EddystoneURL)structure;
+            } else if (structure instanceof EddystoneURL) {
+                EddystoneURL eddystoneUrlStructure = (EddystoneURL) structure;
                 URL url = eddystoneUrlStructure.getURL();
                 mBeaconModel = new BeaconModel(BeaconType.eddystoneURL);
                 mBeaconModel.getEddystoneURL().setUrl(url != null ? url.toExternalForm() : null);
                 mBeaconModel.getEddystoneURL().setPower(eddystoneUrlStructure.getTxPower());
                 fillEddystoneURLCard(mBeaconModel, cardContainer);
-            }
-            else if (structure instanceof EddystoneTLM) {
+            } else if (structure instanceof EddystoneTLM) {
                 EddystoneTLM eddystoneTlmStructure = (EddystoneTLM) structure;
                 mBeaconModel = new BeaconModel(BeaconType.eddystoneTLM);
                 mBeaconModel.getEddystoneTLM().setVoltage(eddystoneTlmStructure.getBatteryVoltage());
                 mBeaconModel.getEddystoneTLM().setTemperature(eddystoneTlmStructure.getBeaconTemperature());
                 mBeaconModel.getEddystoneTLM().setAdvertisingCount(eddystoneTlmStructure.getAdvertisementCount());
-                mBeaconModel.getEddystoneTLM().setUptime(eddystoneTlmStructure.getElapsedTime()/100);
+                mBeaconModel.getEddystoneTLM().setUptime(eddystoneTlmStructure.getElapsedTime() / 100);
                 fillEddystoneTLMCard(mBeaconModel, cardContainer);
-            }
-            else if (structure instanceof EddystoneEID) {
+            } else if (structure instanceof EddystoneEID) {
                 // TODO This is ugly, I am forced to create an unused BeaconModel just to get the type of the beacon, must be changed
                 mBeaconModel = new BeaconModel(BeaconType.eddystoneEID);
-                fillEddystoneEIDCard((EddystoneEID)structure, cardContainer);
-            }
-            else if (structure instanceof LocalName) {
-                fillNameCard((LocalName)structure, cardContainer);
-            }
-            else if (structure instanceof TxPowerLevel) {
-                fillTxPowerLevel((TxPowerLevel)structure, cardContainer);
-            }
-            else if (structure instanceof UUIDs) {
-                fillUuidCard((UUIDs)structure, cardContainer);
-            }
-            else if (structure instanceof ServiceData) {
-                fillServiceDataCard((ServiceData)structure, cardContainer);
-            }
-            else if (structure instanceof Flags) {
-                fillFlagsCard((Flags)structure, cardContainer);
-            }
-            else if (structure instanceof ADManufacturerSpecific) {
+                fillEddystoneEIDCard((EddystoneEID) structure, cardContainer);
+            } else if (structure instanceof LocalName) {
+                fillNameCard((LocalName) structure, cardContainer);
+            } else if (structure instanceof TxPowerLevel) {
+                fillTxPowerLevel((TxPowerLevel) structure, cardContainer);
+            } else if (structure instanceof UUIDs) {
+                fillUuidCard((UUIDs) structure, cardContainer);
+            } else if (structure instanceof ServiceData) {
+                fillServiceDataCard((ServiceData) structure, cardContainer);
+            } else if (structure instanceof Flags) {
+                fillFlagsCard((Flags) structure, cardContainer);
+            } else if (structure instanceof ADManufacturerSpecific) {
                 AltBeacon altBeacon = AltBeacon.parseRecord(mScanResult.getScanRecord());
                 IBeacon iBeacon = new IBeaconParser().parseScanRecord(mScanResult.getScanRecord());
                 if (iBeacon != null) {
                     mBeaconModel = new BeaconModel(BeaconType.ibeacon);
                     mBeaconModel.setIBeacon(iBeacon);
                     fillIBeaconCard(mBeaconModel, cardContainer);
-                }
-                else if (altBeacon != null) {
+                } else if (altBeacon != null) {
                     mBeaconModel = new BeaconModel(BeaconType.altbeacon);
                     mBeaconModel.setAltBeacon(altBeacon);
                     fillAltBeaconCard(mBeaconModel, cardContainer);
+                } else {
+                    fillManufacturerCard((ADManufacturerSpecific) structure, cardContainer);
                 }
-                else {
-                    fillManufacturerCard((ADManufacturerSpecific)structure, cardContainer);
-                }
-            }
-            else {
+            } else {
                 fillUnknownTypeCard(structure, cardContainer);
             }
             appendCardSpace(cardContainer);
@@ -255,16 +242,16 @@ public class FragmentDetailedScan extends Fragment {
     private void fillDeviceCard(ViewGroup container) {
         // Counter total size of packet
         int broadcastSize = 0;
-        for(ADStructure structure : mAdStructures) {
+        for (ADStructure structure : mAdStructures) {
             broadcastSize += structure.getLength() + 1; // Byte of size and content of byte of size
         }
         View view = mLayoutInflater.inflate(R.layout.card_beacon_device, container, false);
         container.addView(view);
-        TextView rssiView = (TextView)view.findViewById(R.id.carddevice_textview_rssi);
+        TextView rssiView = (TextView) view.findViewById(R.id.carddevice_textview_rssi);
         rssiView.setText(getString(R.string.card_device_rssi, mScanResult.getRssi()));
-        TextView macView = (TextView)view.findViewById(R.id.carddevice_textview_mac);
+        TextView macView = (TextView) view.findViewById(R.id.carddevice_textview_mac);
         macView.setText(getString(R.string.card_device_mac, mScanResult.getDevice().getAddress()));
-        TextView typeView = (TextView)view.findViewById(R.id.carddevice_textview_type);
+        TextView typeView = (TextView) view.findViewById(R.id.carddevice_textview_type);
         String type;
         switch (mScanResult.getDevice().getType()) {
             case BluetoothDevice.DEVICE_TYPE_CLASSIC:
@@ -281,7 +268,7 @@ public class FragmentDetailedScan extends Fragment {
                 type = "unknown";
         }
         typeView.setText(getString(R.string.card_device_bluetoothtype, type));
-        CheckBox scanResponseCheckbox = (CheckBox)view.findViewById(R.id.carddevice_checkbox_scanresponse);
+        CheckBox scanResponseCheckbox = (CheckBox) view.findViewById(R.id.carddevice_checkbox_scanresponse);
         sLogger.debug("Length of scan record: {}", broadcastSize);
         if (mScanResult.getScanRecord() != null && broadcastSize > 31) {
             scanResponseCheckbox.setChecked(true);
@@ -323,8 +310,8 @@ public class FragmentDetailedScan extends Fragment {
     private void fillEddystoneEIDCard(EddystoneEID eddystoneEid, ViewGroup cardContainer) {
         View view = mLayoutInflater.inflate(R.layout.card_beacon_eddystone_eid, cardContainer, false);
         cardContainer.addView(view);
-        final TextView txPowerText = (TextView)view.findViewById(R.id.cardeddystoneeid_textview_powervalue);
-        final TextView eidValueText = (TextView)view.findViewById(R.id.cardeddystoneeid_textview_value);
+        final TextView txPowerText = (TextView) view.findViewById(R.id.cardeddystoneeid_textview_powervalue);
+        final TextView eidValueText = (TextView) view.findViewById(R.id.cardeddystoneeid_textview_value);
         txPowerText.setText(NumberFormat.getInstance().format(eddystoneEid.getTxPower()));
         eidValueText.setText(eddystoneEid.getEIDAsString());
     }
@@ -340,8 +327,8 @@ public class FragmentDetailedScan extends Fragment {
     private void fillNameCard(LocalName localName, ViewGroup cardContainer) {
         View view = mLayoutInflater.inflate(R.layout.card_beacon_name, cardContainer, false);
         cardContainer.addView(view);
-        final TextView text = (TextView)view.findViewById(R.id.cardname_textview_name);
-        final CheckBox checkbox = (CheckBox)view.findViewById(R.id.cardname_checkbox_fullname);
+        final TextView text = (TextView) view.findViewById(R.id.cardname_textview_name);
+        final CheckBox checkbox = (CheckBox) view.findViewById(R.id.cardname_checkbox_fullname);
         text.setText(localName.getLocalName());
         checkbox.setChecked(localName.isComplete());
     }
@@ -350,15 +337,15 @@ public class FragmentDetailedScan extends Fragment {
     private void fillFlagsCard(Flags flags, ViewGroup cardContainer) {
         View view = mLayoutInflater.inflate(R.layout.card_beacon_flags, cardContainer, false);
         cardContainer.addView(view);
-        final CheckBox limitedDiscoverableCheckbox = (CheckBox)view.findViewById(R.id.cardflags_checkbox_limiteddiscoverable);
+        final CheckBox limitedDiscoverableCheckbox = (CheckBox) view.findViewById(R.id.cardflags_checkbox_limiteddiscoverable);
         limitedDiscoverableCheckbox.setChecked(flags.isLimitedDiscoverable());
-        final CheckBox generalDiscoverableCheckbox = (CheckBox)view.findViewById(R.id.cardflags_checkbox_generaldiscoverable);
+        final CheckBox generalDiscoverableCheckbox = (CheckBox) view.findViewById(R.id.cardflags_checkbox_generaldiscoverable);
         generalDiscoverableCheckbox.setChecked(flags.isGeneralDiscoverable());
-        final CheckBox classicUnsupportedCheckbox = (CheckBox)view.findViewById(R.id.cardflags_checkbox_classicunsupported);
+        final CheckBox classicUnsupportedCheckbox = (CheckBox) view.findViewById(R.id.cardflags_checkbox_classicunsupported);
         classicUnsupportedCheckbox.setChecked(!flags.isLegacySupported());
-        final CheckBox simultaneousControllerCheckbox = (CheckBox)view.findViewById(R.id.cardflags_checkbox_simultaneouscontroller);
+        final CheckBox simultaneousControllerCheckbox = (CheckBox) view.findViewById(R.id.cardflags_checkbox_simultaneouscontroller);
         simultaneousControllerCheckbox.setChecked(flags.isControllerSimultaneitySupported());
-        final CheckBox simultaneousHostCheckbox = (CheckBox)view.findViewById(R.id.cardflags_checkbox_simultaneoushost);
+        final CheckBox simultaneousHostCheckbox = (CheckBox) view.findViewById(R.id.cardflags_checkbox_simultaneoushost);
         simultaneousHostCheckbox.setChecked(flags.isHostSimultaneitySupported());
     }
 
@@ -366,24 +353,23 @@ public class FragmentDetailedScan extends Fragment {
     private void fillUnknownTypeCard(ADStructure structure, ViewGroup cardContainer) {
         View view = mLayoutInflater.inflate(R.layout.card_beacon_unknown, cardContainer, false);
         cardContainer.addView(view);
-        final TextView dataSizeValue = (TextView)view.findViewById(R.id.cardunknown_textview_datasize);
+        final TextView dataSizeValue = (TextView) view.findViewById(R.id.cardunknown_textview_datasize);
         dataSizeValue.setText(NumberFormat.getInstance().format(structure.getLength()));
-        final TextView structureTypeValue = (TextView)view.findViewById(R.id.cardunknown_textview_type);
+        final TextView structureTypeValue = (TextView) view.findViewById(R.id.cardunknown_textview_type);
         final String gapType = mBtNumbers.convertGapType(structure.getType());
         if (gapType != null) {
             structureTypeValue.setText(String.format("0x%02X - %s", structure.getType(), gapType));
-        }
-        else {
+        } else {
             structureTypeValue.setText(String.format("0x%02X", structure.getType()));
         }
-        final TextView unknownContent = (TextView)view.findViewById(R.id.cardunknown_textview_content);
+        final TextView unknownContent = (TextView) view.findViewById(R.id.cardunknown_textview_content);
         unknownContent.setText(ByteTools.bytesToHexWithSpaces(structure.getData()).toUpperCase());
     }
 
     private void fillManufacturerCard(ADManufacturerSpecific structure, ViewGroup cardContainer) {
         View view = mLayoutInflater.inflate(R.layout.card_beacon_manufacturer, cardContainer, false);
         cardContainer.addView(view);
-        final TextView manufacturerIdValue = (TextView)view.findViewById(R.id.cardmanufacturer_textinput_manufacturerid);
+        final TextView manufacturerIdValue = (TextView) view.findViewById(R.id.cardmanufacturer_textinput_manufacturerid);
         String companyId = String.format("0x%02X", structure.getCompanyId());
         String companyName = mBtNumbers.convertCompanyId(structure.getCompanyId());
         if (companyName != null) {
@@ -393,10 +379,10 @@ public class FragmentDetailedScan extends Fragment {
         if (structure.getLength() <= 2) {
             return;
         }
-        final TextView unknownContent = (TextView)view.findViewById(R.id.cardmanufacturer_textview_datacontent);
+        final TextView unknownContent = (TextView) view.findViewById(R.id.cardmanufacturer_textview_datacontent);
         unknownContent.setText(
                 ByteTools.bytesToHexWithSpaces(
-                        Arrays.copyOfRange(structure.getData(),2,structure.getData().length+1)
+                        Arrays.copyOfRange(structure.getData(), 2, structure.getData().length + 1)
                 ).toUpperCase()
         );
     }
@@ -405,7 +391,7 @@ public class FragmentDetailedScan extends Fragment {
     private void fillTxPowerLevel(TxPowerLevel txPowerLevel, ViewGroup cardContainer) {
         View view = mLayoutInflater.inflate(R.layout.card_beacon_txpower, cardContainer, false);
         cardContainer.addView(view);
-        final TextView text = (TextView)view.findViewById(R.id.cardtxpower_textview_powervalue);
+        final TextView text = (TextView) view.findViewById(R.id.cardtxpower_textview_powervalue);
         text.setText(String.format(Locale.US, "%d dBm", txPowerLevel.getLevel()));
     }
 
@@ -429,20 +415,19 @@ public class FragmentDetailedScan extends Fragment {
                 startOffset = 16;
                 break;
         }
-        final TextView serviceClass = (TextView)view.findViewById(R.id.cardservice_textview_class);
+        final TextView serviceClass = (TextView) view.findViewById(R.id.cardservice_textview_class);
         serviceClass.setText(serviceClassValue);
-        final TextView currentUuid = (TextView)view.findViewById(R.id.cardservice_textinput_uuid);
+        final TextView currentUuid = (TextView) view.findViewById(R.id.cardservice_textinput_uuid);
         final String uuidDescription = mBtNumbers.convertServiceUuid(serviceData.getServiceUUID());
         if (uuidDescription != null) {
             currentUuid.setText(serviceData.getServiceUUID().toString() + "\n" + uuidDescription);
-        }
-        else {
+        } else {
             currentUuid.setText(serviceData.getServiceUUID().toString());
         }
-        final TextView serviceDataContent = (TextView)view.findViewById(R.id.cardservice_textview_datacontent);
+        final TextView serviceDataContent = (TextView) view.findViewById(R.id.cardservice_textview_datacontent);
         serviceDataContent.setText(
                 ByteTools.bytesToHexWithSpaces(
-                        Arrays.copyOfRange(serviceData.getData(),startOffset,serviceData.getData().length+1)
+                        Arrays.copyOfRange(serviceData.getData(), startOffset, serviceData.getData().length + 1)
                 ).toUpperCase()
         );
 
@@ -454,7 +439,7 @@ public class FragmentDetailedScan extends Fragment {
         cardContainer.addView(view);
         String serviceClassValue = "";
         String serviceTypeValue = "";
-        switch (uuids.getType())  {
+        switch (uuids.getType()) {
             // 16-bit UUIDs
             case 0x02: // Incomplete List of 16-bit Service Class UUIDs
                 serviceClassValue = getString(R.string.all_16bit);
@@ -495,18 +480,17 @@ public class FragmentDetailedScan extends Fragment {
                 serviceTypeValue = getString(R.string.card_service_type_sollicitation);
                 break;
         }
-        final TextView serviceClass = (TextView)view.findViewById(R.id.carduuids_textview_class);
+        final TextView serviceClass = (TextView) view.findViewById(R.id.carduuids_textview_class);
         serviceClass.setText(serviceClassValue);
-        final TextView serviceType = (TextView)view.findViewById(R.id.carduuids_textview_servicetype);
+        final TextView serviceType = (TextView) view.findViewById(R.id.carduuids_textview_servicetype);
         serviceType.setText(serviceTypeValue);
-        final TextView uuidList = (TextView)view.findViewById(R.id.carduuids_textview_uuidlist);
+        final TextView uuidList = (TextView) view.findViewById(R.id.carduuids_textview_uuidlist);
         final StringBuilder toDisplay = new StringBuilder();
-        for(UUID uuid : uuids.getUUIDs()) {
+        for (UUID uuid : uuids.getUUIDs()) {
             final String uuidDescription = mBtNumbers.convertServiceUuid(uuid);
             if (uuidDescription != null) {
                 toDisplay.append(uuid.toString().toUpperCase()).append(" - ").append(uuidDescription).append("\n");
-            }
-            else {
+            } else {
                 toDisplay.append(uuid.toString().toUpperCase()).append("\n");
             }
         }

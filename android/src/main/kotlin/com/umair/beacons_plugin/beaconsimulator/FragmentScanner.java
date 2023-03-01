@@ -130,17 +130,19 @@ public class FragmentScanner extends Fragment {
             sLogger.info("New BLE device found: {}", result.getDevice().getAddress());
             mBeaconAdapter.addScanResult(result);
         }
+
         public void onBatchScanResults(List<ScanResult> results) {
         }
+
         public void onScanFailed(int errorCode) {
         }
     };
 
 
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof OnScannerActionDelegate){
+        if (context instanceof OnScannerActionDelegate) {
             mScannerActionDelegate = (OnScannerActionDelegate) context;
         }
     }
@@ -162,7 +164,7 @@ public class FragmentScanner extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_scanner, container, false);
 
-        mDescriptionView = (TextView)view.findViewById(R.id.scanner_textview_description);
+        mDescriptionView = (TextView) view.findViewById(R.id.scanner_textview_description);
         if (mBeaconAdapter.getItemCount() > 0) {
             mDescriptionView.setVisibility(View.GONE);
         }
@@ -209,7 +211,7 @@ public class FragmentScanner extends Fragment {
     public void onStop() {
         super.onStop();
         sLogger.debug("onStop() called");
-        if (mIsScanning && ! getActivity().isChangingConfigurations()) {
+        if (mIsScanning && !getActivity().isChangingConfigurations()) {
             Toast.makeText(getContext(), getString(R.string.scanner_scan_stop), Toast.LENGTH_SHORT).show();
             stopBeaconScan();
         }
@@ -219,7 +221,7 @@ public class FragmentScanner extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_scan, menu);
-        App app = (App)getActivity().getApplication();
+        App app =      App.getInstance();
         menu.findItem(R.id.action_screen_on).setChecked(
                 app.getConfig().getKeepScreenOnForScan()
         );
@@ -232,15 +234,14 @@ public class FragmentScanner extends Fragment {
             mBeaconAdapter.clearAll();
             return true;
         } else if (itemId == R.id.action_screen_on) {
-            App app = (App) getActivity().getApplication();
             if (item.isChecked()) {
                 item.setChecked(false);
-                app.getConfig().setKeepScreenOnForScan(false);
+                App.getInstance().getConfig().setKeepScreenOnForScan(false);
                 updateStateScreenOn(false);
             } else {
                 item.setChecked(true);
                 updateStateScreenOn(true);
-                app.getConfig().setKeepScreenOnForScan(true);
+                App.getInstance().getConfig().setKeepScreenOnForScan(true);
             }
         }
         return super.onOptionsItemSelected(item);
@@ -249,8 +250,7 @@ public class FragmentScanner extends Fragment {
     public void actionScanToggle() {
         if (mIsScanning) {
             stopBeaconScan();
-        }
-        else {
+        } else {
             startBeaconScan();
         }
     }
@@ -262,8 +262,7 @@ public class FragmentScanner extends Fragment {
         sLogger.debug("setUserVisibleHint() called, isVisibleToUser: {}", isVisibleToUser);
         if (isVisibleToUser) {
             updateScanStatusView();
-        }
-        else if (mIsScanning) {
+        } else if (mIsScanning) {
             Toast.makeText(getContext(), getString(R.string.scanner_scan_stop), Toast.LENGTH_SHORT).show();
             stopBeaconScan();
         }
@@ -280,7 +279,7 @@ public class FragmentScanner extends Fragment {
             return;
         }
         boolean ok = checkPermission();
-        if (! ok) {
+        if (!ok) {
             return;
         }
         sLogger.debug("Starting scan of beacons");
@@ -296,7 +295,7 @@ public class FragmentScanner extends Fragment {
     }
 
     public void stopBeaconScan() {
-        if (! mIsScanning) {
+        if (!mIsScanning) {
             return;
         }
         sLogger.debug("Stopping scan of beacons");
@@ -310,7 +309,7 @@ public class FragmentScanner extends Fragment {
 
     public void updateStateScreenOn(boolean shouldKeepScreenOn) {
         final Activity activity = getActivity();
-        final App app = (App)activity.getApplication();
+        final App app = App.getInstance();
         if (shouldKeepScreenOn && app.getConfig().getKeepScreenOnForScan() && mIsScanning) {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             return;
@@ -333,8 +332,7 @@ public class FragmentScanner extends Fragment {
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                         0);
-            }
-            else {
+            } else {
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                         0);
@@ -348,7 +346,7 @@ public class FragmentScanner extends Fragment {
         }
 
         // Check if location enable
-        int locationMode = Settings.Secure.getInt(getContext().getContentResolver(), Settings.Secure.LOCATION_MODE,  Settings.Secure.LOCATION_MODE_OFF);
+        int locationMode = Settings.Secure.getInt(getContext().getContentResolver(), Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF);
         if (locationMode == Settings.Secure.LOCATION_MODE_OFF) {
             needLocation = true;
         }
@@ -357,8 +355,7 @@ public class FragmentScanner extends Fragment {
             DialogAskScanPermission dialog = DialogAskScanPermission.newInstance(needBluetooth, needLocation);
             dialog.show(getFragmentManager(), dialog.getTag());
             return false;
-        }
-        else {
+        } else {
             return true;
         }
 
@@ -376,14 +373,15 @@ public class FragmentScanner extends Fragment {
             public final TextView specificContentSub;
             public final TextView mac;
             public final ImageView beaconType;
+
             public ViewHolder(View v) {
                 super(v);
                 v.setTag(this);
                 view = v;
-                rssi =(TextView) v.findViewById(R.id.scannedbeacon_textview_rssi);
-                mac =(TextView) v.findViewById(R.id.scannedbeacon_textview_mac);
-                specificContent =(TextView) v.findViewById(R.id.scannedbeacon_textview_specific);
-                specificContentSub =(TextView) v.findViewById(R.id.scannedbeacon_textview_specificsub);
+                rssi = (TextView) v.findViewById(R.id.scannedbeacon_textview_rssi);
+                mac = (TextView) v.findViewById(R.id.scannedbeacon_textview_mac);
+                specificContent = (TextView) v.findViewById(R.id.scannedbeacon_textview_specific);
+                specificContentSub = (TextView) v.findViewById(R.id.scannedbeacon_textview_specificsub);
                 beaconType = (ImageView) v.findViewById(R.id.scannedbeacon_imageview_type);
             }
         }
@@ -397,10 +395,10 @@ public class FragmentScanner extends Fragment {
             viewHolder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final ViewHolder vh = (ViewHolder)view.getTag();
+                    final ViewHolder vh = (ViewHolder) view.getTag();
                     final int adapterPosition = vh.getAdapterPosition();
                     if (adapterPosition == RecyclerView.NO_POSITION) {
-                        sLogger.warn( "NO_POSITION returned when beacon is clicked, skipping");
+                        sLogger.warn("NO_POSITION returned when beacon is clicked, skipping");
                         return;
                     }
                     final Context context = view.getContext();
@@ -470,7 +468,7 @@ public class FragmentScanner extends Fragment {
             String[] result = {"", ""};
             AltBeacon altBeaconCandidate = AltBeacon.parseRecord(scanResult.getScanRecord());
             if (altBeaconCandidate != null) {
-                result[0] =  getString(
+                result[0] = getString(
                         R.string.item_model_params_ibeacon,
                         altBeaconCandidate.getBeaconNamespace().toString());
                 result[1] = getString(
@@ -480,7 +478,7 @@ public class FragmentScanner extends Fragment {
                 return result;
             }
             IBeacon iBeacon = new IBeaconParser().parseScanRecord(scanResult.getScanRecord());
-            if (iBeacon!= null) {
+            if (iBeacon != null) {
                 result[0] = getString(
                         R.string.item_model_params_ibeacon,
                         iBeacon.getProximityUUID().toString());
@@ -516,7 +514,7 @@ public class FragmentScanner extends Fragment {
                             eddTlm.getBatteryVoltage(), eddTlm.getAdvertisementCount());
                     result[1] = getString(
                             R.string.item_model_params_eddystoneTLM_sub,
-                            eddTlm.getBeaconTemperature(), eddTlm.getElapsedTime()/1000.0);
+                            eddTlm.getBeaconTemperature(), eddTlm.getElapsedTime() / 1000.0);
                     return result;
                 }
                 if (structure instanceof EddystoneEID) {
@@ -526,21 +524,21 @@ public class FragmentScanner extends Fragment {
                             eddEid.getEIDAsString());
                     result[1] = getString(
                             R.string.item_model_params_eddystoneTLM_scan_sub_unresolved
-                           );
+                    );
                 }
             }
             // Extract beacon name
             SparseArray<byte[]> manufacturerData = scanResult.getScanRecord().getManufacturerSpecificData();
             String name = scanResult.getDevice().getName();
-            if (name != null &&  !name.isEmpty()) {
+            if (name != null && !name.isEmpty()) {
                 result[0] = getString(R.string.item_model_params_name, name);
             }
             // Extract beacon manufacturer
-            BtNumbers btNumbers = ((App)getActivity().getApplication()).getBtNumbers();
-            int manufacturerId = -1 ;
+            BtNumbers btNumbers = App.getInstance().getBtNumbers();
+            int manufacturerId = -1;
             if (manufacturerData != null) {
-                for(int i=0; i<manufacturerData.size(); i++) {
-                    manufacturerId =  manufacturerData.keyAt(0);
+                for (int i = 0; i < manufacturerData.size(); i++) {
+                    manufacturerId = manufacturerData.keyAt(0);
                 }
                 if (manufacturerId == -1) {
                     return result;
@@ -551,7 +549,7 @@ public class FragmentScanner extends Fragment {
             if (companyName != null) {
                 companyId += " - " + companyName;
             }
-            if (companyId != null &&  !companyId.isEmpty()) {
+            if (companyId != null && !companyId.isEmpty()) {
                 result[1] = getString(R.string.item_model_params_manufacturer, companyId);
             }
             return result;
@@ -576,10 +574,9 @@ public class FragmentScanner extends Fragment {
             _dataset.add(beacon);
             _beaconPositions.put(comparableScanResult, _dataset.lastIndexOf(beacon));
             if (_dataset.size() > 1) {
-                notifyItemRangeChanged(_dataset.size()-2, 2);
-            }
-            else {
-                notifyItemInserted(_dataset.size()-1);
+                notifyItemRangeChanged(_dataset.size() - 2, 2);
+            } else {
+                notifyItemInserted(_dataset.size() - 1);
             }
             mDescriptionView.setVisibility(View.GONE);
         }
@@ -592,8 +589,6 @@ public class FragmentScanner extends Fragment {
             mDescriptionView.setVisibility(View.VISIBLE);
         }
     }
-
-
 
 
 }

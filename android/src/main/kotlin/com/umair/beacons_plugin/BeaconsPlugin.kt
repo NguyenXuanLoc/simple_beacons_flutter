@@ -11,6 +11,7 @@ import android.util.Log
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.umair.beacons_plugin.beaconsimulator.App
 import com.umair.beacons_plugin.service.BeaconsService
 import com.umair.beacons_plugin.service.BroadcastService
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -39,6 +40,9 @@ class BeaconsPlugin : FlutterPlugin, ActivityAware,
         context?.let {
             BeaconPreferences.init(it)
             stopBackgroundService(it)
+            App()
+            App.setContext(context)
+            App.getInstance().init()
         }
     }
 

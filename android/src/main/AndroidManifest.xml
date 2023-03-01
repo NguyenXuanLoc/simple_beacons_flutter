@@ -16,7 +16,7 @@
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
 
-    <application android:name=".beaconsimulator.App">
+    <application>
         <receiver
             android:name="com.umair.beacons_plugin.BeaconsBroadcastReceiver"
             android:enabled="true" />

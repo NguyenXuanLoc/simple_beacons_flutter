@@ -82,7 +82,6 @@ import com.umair.beacons_plugin.beaconsimulator.event.UserRequestStopAllEvent;
 import com.umair.beacons_plugin.beaconsimulator.event.UserRequestStopEvent;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -162,9 +161,9 @@ public class BeaconSimulatorService extends Service {
         mAdvertiseCallbacks = new TreeMap<>();
         mAdvertiseStartTimestamp = new HashMap<>();
         mScheduledPendingIntents = new HashMap<>();
-        mBeaconStore = ((App)getApplication()).getBeaconStore();
-        registerReceiver(mBroadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
-        EventBus.getDefault().register(this);
+        mBeaconStore = App.getInstance().getBeaconStore();
+//        registerReceiver(mBroadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+//        EventBus.getDefault().register(this);
         sInstance = this;
     }
 
@@ -199,9 +198,9 @@ public class BeaconSimulatorService extends Service {
             case ACTION_STOP_ALL: {
                 sLogger.debug("Action: stopping all broadcasts");
                 final boolean userTriggered = intent.getBooleanExtra(EXTRA_USER_TRIGGERED, false);
-                if (userTriggered) {
+                /*if (userTriggered) {
                     EventBus.getDefault().post(new UserRequestStopAllEvent());
-                }
+                }*/
                 stopAll(startId, false);
                 break;
             }
@@ -226,10 +225,10 @@ public class BeaconSimulatorService extends Service {
         sLogger.debug("onDestroy() called");
         stopAll(0, true);
         unregisterReceiver(mBroadcastReceiver);
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
     }
 
-    @SuppressWarnings("unused")
+   /* @SuppressWarnings("unused")
     @Subscribe
     public void onBeaconDeleted(BeaconDeletedEvent event) {
         if (mAdvertiseCallbacks.containsKey(event.getBeaconId())) {
@@ -244,7 +243,7 @@ public class BeaconSimulatorService extends Service {
             BeaconSimulatorService.stopBroadcast(this, event.getBeaconId(), false);
             BeaconSimulatorService.startBroadcast(this, event.getBeaconId(), false);
         }
-    }
+    }*/
 
     private void updateBroadcast(int serviceStartId, UUID id) {
         stopBroadcast(serviceStartId, id, true, false);
@@ -267,7 +266,7 @@ public class BeaconSimulatorService extends Service {
         mBtAdvertiser = mBtAdapter.getBluetoothLeAdvertiser();
         if (mBtAdvertiser == null || !mBtAdapter.isEnabled()) {
             sLogger.warn("Bluetooth is off, doing nothing");
-            EventBus.getDefault().post(new BroadcastChangedEvent(id, false, mAdvertiseCallbacks.size()));
+//            EventBus.getDefault().post(new BroadcastChangedEvent(id, false, mAdvertiseCallbacks.size()));
             return;
         }
         final AdvertiseSettings settings = model.getSettings().generateADSettings();
@@ -305,7 +304,7 @@ public class BeaconSimulatorService extends Service {
             removeScheduledUpdate(id);
             mAdvertiseCallbacks.remove(id);
             if (! isRestart) {
-                EventBus.getDefault().post(new BroadcastChangedEvent(id, false, mAdvertiseCallbacks.size()));
+//                EventBus.getDefault().post(new BroadcastChangedEvent(id, false, mAdvertiseCallbacks.size()));
                 // For Fabric Answers
                 long totalTime = (SystemClock.elapsedRealtime() - mAdvertiseStartTimestamp.get(id)) / 1000;
                 mAdvertiseStartTimestamp.remove(id);
@@ -364,7 +363,7 @@ public class BeaconSimulatorService extends Service {
 
     public static void startBroadcast(Context context, UUID uuid, boolean updateActiveList) {
         if (updateActiveList) {
-            EventBus.getDefault().post(new UserRequestStartEvent(uuid));
+//            EventBus.getDefault().post(new UserRequestStartEvent(uuid));
         }
         final Intent intent = new Intent(context, BeaconSimulatorService.class);
         intent.setAction(ACTION_START);
@@ -374,7 +373,7 @@ public class BeaconSimulatorService extends Service {
 
     public static void stopBroadcast(Context context, UUID uuid, boolean updateActiveList) {
         if (updateActiveList) {
-            EventBus.getDefault().post(new UserRequestStopEvent(uuid));
+//            EventBus.getDefault().post(new UserRequestStopEvent(uuid));
         }
         final Intent intent = new Intent(context, BeaconSimulatorService.class);
         intent.setAction(ACTION_STOP);
@@ -441,7 +440,7 @@ public class BeaconSimulatorService extends Service {
             mAdvertiseCallbacks.put(_id, this);
             if (! _isRestart) {
                 mAdvertiseStartTimestamp.put(_id, SystemClock.elapsedRealtime());
-                EventBus.getDefault().post(new BroadcastChangedEvent(_id, true, mAdvertiseCallbacks.size()));
+//                EventBus.getDefault().post(new BroadcastChangedEvent(_id, true, mAdvertiseCallbacks.size()));
                 // Prepare and display notification
                 updateNotification();
             }
@@ -449,7 +448,7 @@ public class BeaconSimulatorService extends Service {
             Log.e("TAG", "Success in starting broadcast, currently active: {}" + String.valueOf(mAdvertiseCallbacks.size()));
         }
         public void onStartFailure(int errorCode) {
-            EventBus.getDefault().post(new BroadcastChangedEvent(_id, false, mAdvertiseCallbacks.size(), true));
+//            EventBus.getDefault().post(new BroadcastChangedEvent(_id, false, mAdvertiseCallbacks.size(), true));
             int reason;
             switch (errorCode) {
                 case ADVERTISE_FAILED_ALREADY_STARTED:

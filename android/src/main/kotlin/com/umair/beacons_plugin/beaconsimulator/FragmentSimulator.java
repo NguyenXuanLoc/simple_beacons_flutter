@@ -136,7 +136,7 @@ public class FragmentSimulator extends Fragment {
         super.onCreate(savedInstanceState);
         sLogger.debug("onCreate()");
         setHasOptionsMenu(true);
-        mBeaconStore = ((App)getActivity().getApplication()).getBeaconStore();
+        mBeaconStore = App.getInstance().getBeaconStore();
     }
 
     @Override

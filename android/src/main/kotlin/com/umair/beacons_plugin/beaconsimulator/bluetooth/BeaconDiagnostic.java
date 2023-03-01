@@ -170,7 +170,7 @@ public class BeaconDiagnostic {
 
     private void restoreBeaconState() {
         for(String beaconId : mRunningBeaconsState) {
-            BeaconSimulatorService.startBroadcast(App.getInstance().getApplicationContext(), UUID.fromString(beaconId), false);
+            BeaconSimulatorService.startBroadcast(App.context, UUID.fromString(beaconId), false);
         }
     }
 

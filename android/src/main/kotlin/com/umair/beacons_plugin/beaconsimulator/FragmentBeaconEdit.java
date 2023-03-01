@@ -92,7 +92,7 @@ public class FragmentBeaconEdit extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBeaconStore = ((App)getActivity().getApplication()).getBeaconStore();
+        mBeaconStore = App.getInstance().getBeaconStore();
         setRetainInstance(true);
         setHasOptionsMenu(true);
         final Bundle bundle = getArguments();
@@ -142,9 +142,9 @@ public class FragmentBeaconEdit extends Fragment {
             case eddystoneUID:
                 beaconModelView = new ViewEditEddystoneUid(getContext());
                 break;
-            case eddystoneURL:
+       /*     case eddystoneURL:
                 beaconModelView = new ViewEditEddystoneUrl(getContext());
-                break;
+                break;*/
             case eddystoneEID:
                 beaconModelView = new ViewEditEddystoneEid(getContext());
                 break;
