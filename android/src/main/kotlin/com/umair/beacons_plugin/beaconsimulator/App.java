@@ -92,7 +92,6 @@ public class App {
     }
 
     public void init() {
-        sInstance = this;
         LoggerConfig.configLogger();            // We can start to log starting here
         sLogger.info("Beacon simulator starting!");
 
