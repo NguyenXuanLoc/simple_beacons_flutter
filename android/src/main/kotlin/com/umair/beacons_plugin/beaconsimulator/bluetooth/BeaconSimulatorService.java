@@ -161,7 +161,10 @@ public class BeaconSimulatorService extends Service {
         mAdvertiseCallbacks = new TreeMap<>();
         mAdvertiseStartTimestamp = new HashMap<>();
         mScheduledPendingIntents = new HashMap<>();
-        mBeaconStore = App.getInstance().getBeaconStore();
+        try {
+            mBeaconStore = App.getInstance().getBeaconStore();
+        } catch (Exception e) {
+        }
 //        registerReceiver(mBroadcastReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 //        EventBus.getDefault().register(this);
         sInstance = this;
@@ -482,11 +485,23 @@ public class BeaconSimulatorService extends Service {
 
     private void updateNotification() {
         final Intent activityIntent = new Intent();
-        final PendingIntent activityPendingIntent = PendingIntent.getActivity(BeaconSimulatorService.this, 0, activityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent activityPendingIntent;
+//                = PendingIntent.getActivity(BeaconSimulatorService.this, 0, activityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            activityPendingIntent = PendingIntent.getActivity(BeaconSimulatorService.this, 0, activityIntent, PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            activityPendingIntent = PendingIntent.getActivity(BeaconSimulatorService.this, 0, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
         final Intent stopBroadcastIntent = new Intent(BeaconSimulatorService.this, BeaconSimulatorService.class);
         stopBroadcastIntent.setAction(ACTION_STOP_ALL);
         stopBroadcastIntent.putExtra(EXTRA_USER_TRIGGERED, true);
-        final PendingIntent stopBroadcastPendingIntent = PendingIntent.getService(BeaconSimulatorService.this, 0, stopBroadcastIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent stopBroadcastPendingIntent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            stopBroadcastPendingIntent = PendingIntent.getService(BeaconSimulatorService.this, 0, stopBroadcastIntent, PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            stopBroadcastPendingIntent = PendingIntent.getService(BeaconSimulatorService.this, 0, stopBroadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Channel creation
             final CharSequence name = getString(R.string.notif_channel_name);

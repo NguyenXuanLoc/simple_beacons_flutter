@@ -1,10 +1,12 @@
 import 'dart:async';
-import 'dart:io' show Platform;
+import 'dart:io' show File, Platform;
 import 'dart:math';
+import 'package:beacons_plugin_example/permission_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:beacons_plugin/beacons_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,9 +39,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addObserver(this);
     initPlatformState();
-
+    requestPermission();
     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     var initializationSettingsAndroid =
         new AndroidInitializationSettings('app_icon');
@@ -50,6 +53,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: null);
     BeaconsPlugin.listenNative();
+  }
+
+  void requestPermission() async{
+   await PermissionUtils.isRequestPermission(Permission.location, isRequest: true);
+   await PermissionUtils.isRequestPermission(Permission.bluetooth, isRequest: true);
+   await PermissionUtils.isRequestPermission(Permission.bluetoothScan, isRequest: true);
+   await PermissionUtils.isRequestPermission(Permission.bluetoothConnect, isRequest: true);
+   await PermissionUtils.isRequestPermission(Permission.bluetoothAdvertise, isRequest: true);
   }
 
   @override
